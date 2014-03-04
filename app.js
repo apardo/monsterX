@@ -12,13 +12,13 @@ var path = require('path');
 var Twit = require('twit');
 var model = require('./models');
 
-credentials = fs.readFileSync('./config/credentials', { encoding: 'utf8' });
+var credentials = JSON.parse(fs.readFileSync('./config/credentials'));
 
 var T = new Twit({
 	consumer_key: credentials.consumer_key,
 	consumer_secret: credentials.consumer_secret,
 	access_token: credentials.access_token,
-	access_token_secret: credentials.access_token_secret,
+	access_token_secret: credentials.access_token_secret
 });
 
 var watchList = ['linux'];
