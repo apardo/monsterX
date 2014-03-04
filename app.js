@@ -1,8 +1,40 @@
+var fs = require('fs');
+//var srvOps = {
+//	key: fs.readFileSync('./certs/server.key'),
+//	cert: fs.readFileSync('./certs/server.crt')
+//}
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var path = require('path');
+var Twit = require('twit');
+var model = require('./models');
+
+credentials = fs.readFileSync('./config/credentials', { encoding: 'utf8' });
+
+var T = new Twit({
+	consumer_key: credentials.consumer_key,
+	consumer_secret: credentials.consumer_secret,
+	access_token: credentials.access_token,
+	access_token_secret: credentials.access_token_secret,
+});
+
+var watchList = ['linux'];
+
+var stream = T.stream('statuses/filter', { track: watchList });
+stream.on('tweet', function(tweet) {
+	model.addTweet(tweet);
+	var msg = {
+		text: tweet.text,
+		user: {
+			screen_name: tweet.user.screen_name,
+			profile_image_url: tweet.user.profile_image_url
+		},
+	};
+	io.sockets.emit('tweets', msg);
+});
 
 io.sockets.on('connection', function(socket) {
 	socket.emit('debug', "Connected to socket server");
@@ -33,7 +65,19 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res) {
-	res.render('index', { title: 'monsterX' });
+	model.getTweets(function(err, tweets) {
+		res.render('index', { title: 'monsterX', tweets: tweets });
+	});
+});
+
+app.get('/tweets', function(req, res) {
+	model.getTweets(function(err, tweets) {
+		res.json(tweets);
+	});
+});
+
+app.get('/visual', function(req, res) {
+	res.render('visual', { title: 'monsterX' });
 });
 
 server.listen(app.get('port'), function() {

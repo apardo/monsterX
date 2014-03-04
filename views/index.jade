@@ -1,38 +1,10 @@
 extends layout
 
 block content
-  .fixed
-    nav.top-bar(data-topbar)
-      ul.title-area
-        li.name
-          h1
-            a(href="/")= title
-        li.toggle-topbar.menu-icon
-          a(href="#") Menu
-      section.top-bar-section
-        ul.right
-          li.active
-            a(href="#") Registrarse
-          li.has-dropdown
-            a(href="#") Conectar
-            ul.dropdown
-              li
-                a(href="#") First link in dropdown
-        ul.left
-          li
-            a(href="#") Status
-  #salutation.row
-    .large-12.columns
-      h1= title
-  .row
-    .large-12.columns
-      .panel
-        form
-          .row
-            .large-2.columns
-              input#input-handle(type="text" placeholder="Nick" autofocus)
-            .large-8.columns
-              input#input-text(type="text" placeholder="Mensaje")
-            .large-2.columns
-              button#input-form.button.tiny Enviar
-        #chat-text
+  #panels.row(data-equalizer)
+    each tweet in tweets
+      .medium-4.columns
+        .panel(data-equalizer-watch)
+          img(src="#{tweet.user.profile_image_url}")
+          h3= tweet.user.screen_name
+          p= tweet.text

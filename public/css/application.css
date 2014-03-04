@@ -1,28 +1,21 @@
-#salutation {
-	margin-top: 4px;
+.top-bar {
+	margin-bottom: 4px;
 }
 
-#chat-text {
-  overflow: auto;
-  height: 400px;
+.panel {
+	max-height: 230px;
+	min-height: 230px;
 }
 
-#chat-text::-webkit-scrollbar{
-  width: 8px;
-} 
-
-#chat-text::-webkit-scrollbar-thumb{
-  background-color: #007095;
+.panel img {
+  float: right;
 }
 
-#chat-text::-webkit-scrollbar-thumb:hover{
-  background-color: #004a63;
+.last-tweet {
+	background-color: #000;
 }
 
-#chat-text::-webkit-scrollbar-thumb:active{
-  background-color: #001820;
-} 
+.last-tweet h3, .last-tweet p {
+  color: #fff;
+}
 
-#chat-text::-webkit-scrollbar-track{
-  -webkit-box-shadow:0 0 6px gray inset;
-} 
